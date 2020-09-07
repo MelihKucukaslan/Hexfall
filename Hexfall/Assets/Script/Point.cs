@@ -55,7 +55,7 @@ public class Point : MonoBehaviour
             {
 
                 hexagons.Add(allHex[i].gameObject);
-                //  hexagons.Sort(hexagons[i].GetComponent<Hexagon>().row,hexagons[i].GetComponent<Hexagon>().col);
+    
             }
 
         }
@@ -109,7 +109,11 @@ public class Point : MonoBehaviour
         yield return new WaitForSeconds(5f);
 
     }
-
+    private void Update() {
+        if(gridManager.state != GridManager.GameState.GAMING){
+            StartCoroutine(Drop());
+        }
+    }
 
 /////// Seçim yapıldığında listeye alınan 3 altıgeni child objesi yapar ve outline çizdirir
     public void SelectObje()

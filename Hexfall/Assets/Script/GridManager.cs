@@ -13,6 +13,7 @@ public class GridManager : MonoBehaviour
 
     public GameObject gameOverMenu;
     public bool isNextBomb;
+    [SerializeField]
     public GameObject[,] allHex;
 
 
@@ -162,7 +163,7 @@ public class GridManager : MonoBehaviour
     ////////// Yok edilen altıgenler yerine, yenisinin üretildiği kod bloğu
     IEnumerator RefillGrid()
     {
-        yield return new WaitForSeconds(.5f);
+        yield return new WaitForSeconds(.2f);
         if (state == GameState.SPAWNING)
         {
             for (int x = 0; x < rows; x++)
@@ -170,6 +171,9 @@ public class GridManager : MonoBehaviour
 
                 for (int y = 0; y < cols; y++)
                 {
+                    if(state == GameState.DESTROY){
+                        yield break;
+                    }
                     if (allHex[x, y] == null)
                     {
                         float xPos = x;
@@ -202,13 +206,13 @@ public class GridManager : MonoBehaviour
                 yield return new WaitForSeconds(.01f);
             }
         }
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
     }
 
     public IEnumerator WaitRefill()
     {
         state = GameState.SPAWNING;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.2f);
         StartCoroutine(RefillGrid());
 
 
@@ -267,12 +271,14 @@ public class GridManager : MonoBehaviour
                 if (allHex[x, y] == null)
                 {
                     nullCount += 2;
-
+                    
                 }
                 else if (nullCount > 0)
                 {
                     allHex[x, y].GetComponent<Hexagon>().col -= nullCount;
                     allHex[x, y] = null;
+                    state = GameState.DESTROY;
+                    
                 }
 
             }
